@@ -5,7 +5,7 @@ interface ButtonProps {
     onPress: () => void;
     className?: string;
     style?: StyleProp<ViewStyle>;
-    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'link';
+    variant?: 'default' | 'destructive' | 'outline' | 'secondary';
     size?: 'default' | 'sm' | 'lg';
 }
 declare const Button: React.FC<ButtonProps>;

@@ -14,8 +14,8 @@ interface ButtonProps {
 }
 
 const variants = {
-  default: 'bg-[#343434] text-white shadow-xs',
-  destructive: 'bg-[#d72638] text-white shadow-xs',
+  default: 'bg-[#343434]  shadow-xs',
+  destructive: 'bg-[#d72638]  shadow-xs',
   outline: 'border border-input bg-[#ffffff] text-[#343434]',
   secondary: 'bg-[#ffffff] text-[#343434]',
 };
