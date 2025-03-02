@@ -9,16 +9,15 @@ interface ButtonProps {
   onPress: () => void;
   className?: string;
   style?: StyleProp<ViewStyle>;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'link';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary';
   size?: 'default' | 'sm' | 'lg';
 }
 
 const variants = {
-  default: 'bg-primary text-primary-foreground shadow-xs',
-  destructive: 'bg-destructive text-white shadow-xs',
-  outline: 'border border-input bg-background shadow-xs',
-  secondary: 'bg-secondary text-secondary-foreground shadow-xs',
-  link: 'text-primary underline-offset-4',
+  default: 'bg-[#343434] text-white shadow-xs',
+  destructive: 'bg-[#d72638] text-white shadow-xs',
+  outline: 'border border-input bg-[#ffffff] text-[#343434]',
+  secondary: 'bg-[#ffffff] text-[#343434]',
 };
 
 const sizes = {
