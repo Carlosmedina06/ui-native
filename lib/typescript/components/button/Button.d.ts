@@ -5,6 +5,8 @@ interface ButtonProps {
     onPress: () => void;
     className?: string;
     style?: StyleProp<ViewStyle>;
+    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'link';
+    size?: 'default' | 'sm' | 'lg';
 }
 declare const Button: React.FC<ButtonProps>;
 export default Button;
