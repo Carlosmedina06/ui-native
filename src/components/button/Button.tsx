@@ -1,7 +1,12 @@
 import { TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import { cssInterop } from 'react-native-css-interop';
+import { ClassValue } from 'clsx';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-import cn from '../../utils/cn';
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface ButtonProps {
   children?: React.ReactNode;
