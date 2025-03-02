@@ -16,7 +16,7 @@ const variants = {
   default: 'bg-[#ffffff]',
   destructive: 'bg-[#d72638]',
   outline: 'border border-[#343434] active:bg-[#343434]',
-  secondary: 'bg-[#ffffff] text-[#343434]',
+  secondary: 'bg-[#000000] ',
   ghost: 'bg-none active:bg-[#ffffff]',
 };
 
