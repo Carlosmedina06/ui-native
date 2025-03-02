@@ -1,6 +1,12 @@
 import { Text as BaseText, StyleProp, TextStyle } from 'react-native';
 import { cssInterop } from 'react-native-css-interop';
-import cn from 'src/utils/cn';
+import { ClassValue } from 'clsx';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 interface TextProps {
   children: React.ReactNode;
