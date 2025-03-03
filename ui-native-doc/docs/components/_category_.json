@@ -1,0 +1,8 @@
+{
+  "label": "📦 Components",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Explore the UI Native components and learn how to use them in your React Native projects. We will be adding more components and examples soon."
+  }
+}
