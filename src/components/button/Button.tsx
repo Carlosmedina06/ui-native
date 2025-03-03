@@ -1,8 +1,9 @@
+import { ClassValue, clsx } from 'clsx';
 import { TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 import { cssInterop } from 'react-native-css-interop';
-import { ClassValue } from 'clsx';
-import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+import Text from '../text/Text';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,16 +14,26 @@ interface ButtonProps {
   onPress: () => void;
   className?: string;
   style?: StyleProp<ViewStyle>;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'ghostDark';
   size?: 'default' | 'sm' | 'lg';
 }
 
 const variants = {
-  default: 'bg-[#ffffff]',
+  default: 'bg-[#ffffff] active:bg-[#000000]',
   destructive: 'bg-[#d72638]',
   outline: 'border border-[#343434] active:bg-[#343434]',
-  secondary: 'bg-[#000000] ',
-  ghost: 'bg-none active:bg-[#ffffff]',
+  secondary: 'bg-[#000000] active:bg-[#ffffff]',
+  ghost: 'bg-none',
+  ghostDark: 'bg-none',
+};
+
+const PairsColors: Record<string, 'black' | 'white' | 'gray'> = {
+  default: 'black',
+  destructive: 'white',
+  outline: 'gray',
+  secondary: 'white',
+  ghost: 'black',
+  ghostDark: 'white',
 };
 
 const sizes = {
@@ -41,7 +52,6 @@ const Button: React.FC<ButtonProps> = ({
   style,
   variant = 'default',
   size = 'default',
-  children,
 }) => {
   return (
     <StyledButton
@@ -49,7 +59,7 @@ const Button: React.FC<ButtonProps> = ({
       style={style}
       onPress={onPress}
     >
-      {children}
+      <Text children="Open App.tsx" color={PairsColors[variant]} variant="bold" />
     </StyledButton>
   );
 };

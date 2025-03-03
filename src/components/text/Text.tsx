@@ -1,7 +1,6 @@
+import { ClassValue, clsx } from 'clsx';
 import { Text as BaseText, StyleProp, TextStyle } from 'react-native';
 import { cssInterop } from 'react-native-css-interop';
-import { ClassValue } from 'clsx';
-import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs: ClassValue[]) {
@@ -35,7 +34,7 @@ const variants = {
   h3: 'text-2xl font-medium',
   h4: 'text-xl font-medium',
   p: 'text-base',
-  inline: 'font-mono bg-gray-200 px-1 rounded',
+  inline: 'font-mono bg-gray-200 px-1 rounded text-black',
   lead: 'text-lg text-gray-700',
   large: 'text-lg font-semibold',
   small: 'text-sm',
