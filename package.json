@@ -1,6 +1,6 @@
 {
   "name": "@carlosmedina06/ui-native",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "license": "MIT",
   "private": false,
   "main": "lib/commonjs/index.js",
