@@ -31,6 +31,7 @@ interface CarouselProps<T> {
   renderItem: (item: T, index: number) => JSX.Element;
   autoPlay?: boolean;
   variants?: 'default' | 'rounded';
+  className?: string;
 }
 
 interface CarouselItemProps<T> {
@@ -39,6 +40,7 @@ interface CarouselItemProps<T> {
   data: T[];
   children: React.ReactNode;
   variants?: 'default' | 'rounded';
+  className?: string;
 }
 
 const StyledView = cssInterop(View, {
@@ -50,6 +52,7 @@ const Carousel = <T,>({
   renderItem,
   autoPlay = true,
   variants = 'default',
+  className,
 }: CarouselProps<T>) => {
   const scrollX = useSharedValue(0);
   const offset = useSharedValue(0);
@@ -95,7 +98,13 @@ const Carousel = <T,>({
         decelerationRate="fast"
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <CarouselItem data={data} index={index} scrollX={scrollX} variants={variants}>
+          <CarouselItem
+            className={className}
+            data={data}
+            index={index}
+            scrollX={scrollX}
+            variants={variants}
+          >
             {renderItem(item, index)}
           </CarouselItem>
         )}
@@ -112,7 +121,7 @@ const Carousel = <T,>({
 
 const variantStyles = {
   default: 'flex-1 border border-gray-200',
-  rounded: 'rounded-xl flex-1 border border-gray-200',
+  rounded: 'rounded-md flex-1 border border-gray-200',
 };
 
 const CarouselItem = <T,>({
@@ -121,6 +130,7 @@ const CarouselItem = <T,>({
   data,
   children,
   variants = 'default',
+  className,
 }: CarouselItemProps<T>) => {
   const rnAnimatedStyles = useAnimatedStyle(() => {
     const inputRange = [(index - 1) * TOTAL_WIDTH, index * TOTAL_WIDTH, (index + 1) * TOTAL_WIDTH];
@@ -169,7 +179,7 @@ const CarouselItem = <T,>({
           },
         ]}
       >
-        <StyledView className={cn(variantStyles[variants])}>{children}</StyledView>
+        <StyledView className={cn(variantStyles[variants], className)}>{children}</StyledView>
       </Animated.View>
     </TouchableOpacity>
   );
