@@ -1,4 +1,7 @@
+import { ClassValue, clsx } from 'clsx';
+import { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { cssInterop } from 'react-native-css-interop';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -10,51 +13,47 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
-import Text from '../text/Text';
-
-const getWP = (percent: number) => {
-  return (percent / 100) * Dimensions.get('window').width;
-};
-
-interface CardData {
-  title: string;
-  description: string;
-  backgroundColor: string;
-  borderColor: string;
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
 
-interface CarruselItemProps {
-  item: CardData;
-  index: number;
-  scrollX: SharedValue<number>;
-}
+const getWP = (percent: number) => (percent / 100) * Dimensions.get('window').width;
 
 const { width } = Dimensions.get('screen');
 const GAP = getWP(12);
 const ITEM_WIDTH = width * 0.8;
 const TOTAL_WIDTH = ITEM_WIDTH + GAP;
 
-const cards: CardData[] = [
-  {
-    title: 'Preguntas frecuentes',
-    description: 'Aprendé cómo cargar una receta',
-    backgroundColor: '#FFFAEB',
-    borderColor: '#FEF0C7',
-  },
-  {
-    title: 'Nuevo',
-    description: 'Consultá recetas disponibles con la credencial',
-    backgroundColor: '#d1fadf',
-    borderColor: '#d1fadf',
-  },
-];
+interface CarouselProps<T> {
+  data: T[];
+  renderItem: (item: T, index: number) => JSX.Element;
+  autoPlay?: boolean;
+  variants?: 'default' | 'rounded';
+}
 
-const PromoCarousel = () => {
+interface CarouselItemProps<T> {
+  index: number;
+  scrollX: SharedValue<number>;
+  data: T[];
+  children: React.ReactNode;
+  variants?: 'default' | 'rounded';
+}
+
+const StyledView = cssInterop(View, {
+  className: 'style',
+});
+
+const Carousel = <T,>({
+  data,
+  renderItem,
+  autoPlay = true,
+  variants = 'default',
+}: CarouselProps<T>) => {
   const scrollX = useSharedValue(0);
   const offset = useSharedValue(0);
-  const ref = useAnimatedRef<Animated.FlatList<any>>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const ref = useAnimatedRef<Animated.FlatList<T>>();
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const onScrollHandler = useAnimatedScrollHandler({
@@ -73,9 +72,9 @@ const PromoCarousel = () => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
-    if (isAutoPlay) {
+    if (isAutoPlay && autoPlay) {
       intervalId = setInterval(() => {
-        offset.value = (offset.value + 1) % cards.length;
+        offset.value = (offset.value + 1) % data.length;
       }, 3000);
     }
 
@@ -84,19 +83,21 @@ const PromoCarousel = () => {
         clearInterval(intervalId);
       }
     };
-  }, [isAutoPlay, offset]);
+  }, [isAutoPlay, offset, data, autoPlay]);
 
   return (
-    <View className="align-center ml-[-15px] flex justify-center">
+    <View className="align-center ml-[-15px] flex max-h-[150] justify-center">
       <Animated.FlatList
         ref={ref}
         horizontal
         contentContainerStyle={{ gap: GAP }}
-        data={cards}
+        data={data}
         decelerationRate="fast"
-        keyExtractor={(item) => item.title}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <CarruselItem index={index} item={item} scrollX={scrollX} />
+          <CarouselItem data={data} index={index} scrollX={scrollX} variants={variants}>
+            {renderItem(item, index)}
+          </CarouselItem>
         )}
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
@@ -109,7 +110,18 @@ const PromoCarousel = () => {
   );
 };
 
-const CarruselItem = ({ item, index, scrollX }: CarruselItemProps) => {
+const variantStyles = {
+  default: 'flex-1 border border-gray-200',
+  rounded: 'rounded-xl flex-1 border border-gray-200',
+};
+
+const CarouselItem = <T,>({
+  index,
+  scrollX,
+  data,
+  children,
+  variants = 'default',
+}: CarouselItemProps<T>) => {
   const rnAnimatedStyles = useAnimatedStyle(() => {
     const inputRange = [(index - 1) * TOTAL_WIDTH, index * TOTAL_WIDTH, (index + 1) * TOTAL_WIDTH];
 
@@ -127,15 +139,16 @@ const CarruselItem = ({ item, index, scrollX }: CarruselItemProps) => {
     };
   });
 
-  // Condicional para el margen en el primer y último ítem
-  const getItemMargin = (index: number) => {
+  const getItemMargin = (index: number, data: T[]) => {
+    if (!data?.length) return {};
+
     if (index === 0) {
-      return { marginStart: 15 }; // Primer ítem
-    } else if (index === cards.length - 1) {
-      return { marginEnd: 15 }; // Último ítem
+      return { marginStart: 15 };
+    } else if (index === data?.length - 1) {
+      return { marginEnd: 15 };
     }
 
-    return {}; // Para otros ítems, sin márgenes
+    return {};
   };
 
   return (
@@ -145,25 +158,21 @@ const CarruselItem = ({ item, index, scrollX }: CarruselItemProps) => {
           rnAnimatedStyles,
           {
             height: 150,
-            backgroundColor: item.backgroundColor,
-            borderColor: item.borderColor,
+            maxHeight: 150,
             justifyContent: 'center',
             width: ITEM_WIDTH,
             borderRadius: 10,
-            padding: 16,
+            paddingRight: 16,
             flexDirection: 'row',
             alignItems: 'center',
-            ...getItemMargin(index),
+            ...getItemMargin(index, data),
           },
         ]}
       >
-        <View className="flex-1 pr-[15px]">
-          <Text variant="semibold">{item.title}</Text>\{' '}
-          <Text variant="semibold">{item.description}</Text>
-        </View>
+        <StyledView className={cn(variantStyles[variants])}>{children}</StyledView>
       </Animated.View>
     </TouchableOpacity>
   );
 };
 
-export default PromoCarousel;
+export default Carousel;
