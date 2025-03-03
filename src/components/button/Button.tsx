@@ -16,6 +16,7 @@ interface ButtonProps {
   style?: StyleProp<ViewStyle>;
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'ghostDark';
   size?: 'default' | 'sm' | 'lg';
+  textColor?: 'black' | 'white' | 'gray';
 }
 
 const variants = {
@@ -52,6 +53,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   variant = 'default',
   size = 'default',
+  textColor,
 }) => {
   return (
     <StyledButton
@@ -59,7 +61,11 @@ const Button: React.FC<ButtonProps> = ({
       style={style}
       onPress={onPress}
     >
-      <Text children="Open App.tsx" color={PairsColors[variant]} variant="bold" />
+      <Text
+        children="Open App.tsx"
+        color={textColor ? textColor : PairsColors[variant]}
+        variant="semibold"
+      />
     </StyledButton>
   );
 };
