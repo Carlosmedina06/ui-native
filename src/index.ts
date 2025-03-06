@@ -5,3 +5,4 @@ export {
   CarouselItemProps,
   CarouselProps,
 } from './components/carousel/Carousel';
+export { default as Accordion, AccordionProps } from './components/accordion/Accordion';
