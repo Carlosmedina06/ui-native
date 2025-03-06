@@ -1,5 +1,11 @@
 import { ClassValue, clsx } from 'clsx';
-import { TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
+import {
+  TouchableOpacity,
+  TouchableOpacityProps,
+  ActivityIndicator,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { cssInterop } from 'react-native-css-interop';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,14 +15,17 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface ButtonProps {
-  children?: React.ReactNode;
-  onPress: () => void;
+export interface ButtonProps extends Omit<TouchableOpacityProps, 'style' | 'children'> {
   className?: string;
   style?: StyleProp<ViewStyle>;
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'ghostDark';
   size?: 'default' | 'sm' | 'lg';
-  textColor?: 'black' | 'white' | 'gray';
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+  disabled?: boolean;
+  isLoading?: boolean;
+  justIcon?: boolean;
+  children?: React.ReactNode;
 }
 
 const variants = {
@@ -53,19 +62,42 @@ const Button: React.FC<ButtonProps> = ({
   style,
   variant = 'default',
   size = 'default',
-  textColor,
+  icon = null,
+  iconPosition = 'left',
+  disabled = false,
+  isLoading = false,
+  justIcon = false,
+  children,
+  ...restProps
 }) => {
   return (
     <StyledButton
-      className={cn(`aling-center  flex justify-center`, variants[variant], sizes[size], className)}
+      className={cn(
+        'flex items-center justify-center',
+        justIcon ? 'h-auto min-w-[auto] p-2' : 'min-w-36 flex-row gap-4',
+        variants[variant],
+        sizes[size],
+        className,
+        disabled && 'opacity-50',
+      )}
+      disabled={disabled || isLoading}
       style={style}
-      onPress={onPress}
+      onPress={!isLoading ? onPress : undefined}
+      {...restProps}
     >
-      <Text
-        children="Open App.tsx"
-        color={textColor ? textColor : PairsColors[variant]}
-        variant="semibold"
-      />
+      {isLoading && !disabled ? (
+        <ActivityIndicator color={PairsColors[variant]} size="small" />
+      ) : justIcon && icon ? (
+        icon
+      ) : (
+        <>
+          {iconPosition === 'left' && icon}
+          <Text color={PairsColors[variant]} variant="bold">
+            {children}
+          </Text>
+          {iconPosition === 'right' && icon}
+        </>
+      )}
     </StyledButton>
   );
 };

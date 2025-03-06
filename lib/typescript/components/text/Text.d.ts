@@ -1,5 +1,5 @@
-import { StyleProp, TextStyle } from 'react-native';
-interface TextProps {
+import { Text as BaseText, StyleProp, TextStyle } from 'react-native';
+export interface TextProps extends React.ComponentProps<typeof BaseText> {
     children: React.ReactNode;
     className?: string;
     style?: StyleProp<TextStyle>;

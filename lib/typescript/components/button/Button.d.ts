@@ -1,12 +1,15 @@
-import { StyleProp, ViewStyle } from 'react-native';
-interface ButtonProps {
-    children?: React.ReactNode;
-    onPress: () => void;
+import { TouchableOpacityProps, StyleProp, ViewStyle } from 'react-native';
+export interface ButtonProps extends Omit<TouchableOpacityProps, 'style' | 'children'> {
     className?: string;
     style?: StyleProp<ViewStyle>;
     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'ghostDark';
     size?: 'default' | 'sm' | 'lg';
-    textColor?: 'black' | 'white' | 'gray';
+    icon?: React.ReactNode;
+    iconPosition?: 'left' | 'right';
+    disabled?: boolean;
+    isLoading?: boolean;
+    justIcon?: boolean;
+    children?: React.ReactNode;
 }
 declare const Button: React.FC<ButtonProps>;
 export default Button;

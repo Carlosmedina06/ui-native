@@ -7,7 +7,7 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface TextProps {
+export interface TextProps extends React.ComponentProps<typeof BaseText> {
   children: React.ReactNode;
   className?: string;
   style?: StyleProp<TextStyle>;
@@ -60,9 +60,14 @@ const Text: React.FC<TextProps> = ({
   style,
   variant = 'default',
   color = 'black',
+  ...restProps
 }) => {
   return (
-    <StyledText className={cn(variants[variant], colors[color], className)} style={style}>
+    <StyledText
+      {...restProps}
+      className={cn(variants[variant], colors[color], className)}
+      style={style}
+    >
       {children}
     </StyledText>
   );

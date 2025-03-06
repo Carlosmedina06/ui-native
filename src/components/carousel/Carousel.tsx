@@ -26,7 +26,7 @@ const GAP = getWP(12);
 const ITEM_WIDTH = width * 0.8;
 const TOTAL_WIDTH = ITEM_WIDTH + GAP;
 
-interface CarouselProps<T> {
+export interface CarouselProps<T> {
   data: T[];
   renderItem: (item: T, index: number) => JSX.Element;
   autoPlay?: boolean;
@@ -34,7 +34,7 @@ interface CarouselProps<T> {
   className?: string;
 }
 
-interface CarouselItemProps<T> {
+export interface CarouselItemProps<T> {
   index: number;
   scrollX: SharedValue<number>;
   data: T[];
